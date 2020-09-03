@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeploymentManager.Contracts
+namespace DeploymentManager.Contracts.Settings
 {
     public interface IApplicationSettings
     {

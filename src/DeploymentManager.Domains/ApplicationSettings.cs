@@ -1,4 +1,4 @@
-﻿using DeploymentManager.Contracts;
+﻿using DeploymentManager.Contracts.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

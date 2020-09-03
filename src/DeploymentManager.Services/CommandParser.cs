@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Contracts;
+using DeploymentManager.Contracts.Managers;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
 using DeploymentManager.Shared;
@@ -10,10 +11,10 @@ namespace DeploymentManager.Services
 {
     public class CommandParser : ICommandParser
     {
-        public CommandParser(IApplicationSettings applicationSettings, IDictionary<string, ICommand> commandDictionary)
+        public CommandParser(IApplicationSettings applicationSettings, ICommandManager commandManager)
         {
             this.applicationSettings = applicationSettings;
-            this.commandDictionary = commandDictionary;
+            this.commandManager = commandManager;
         }
 
         public bool TryParse(string input, IAppletSettings appletSettings, out ICommand command)
@@ -24,7 +25,7 @@ namespace DeploymentManager.Services
 
             var commandInput = inputValues.FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(commandInput) || !commandDictionary.TryGetValue(commandInput, out command))
+            if (string.IsNullOrWhiteSpace(commandInput) || !commandManager.TryGetCommand(commandInput, out command))
             {
                 return false;
             }
@@ -59,6 +60,6 @@ namespace DeploymentManager.Services
         }
 
         private readonly IApplicationSettings applicationSettings;
-        private readonly IDictionary<string, ICommand> commandDictionary;
+        private readonly ICommandManager commandManager;
     }
 }
