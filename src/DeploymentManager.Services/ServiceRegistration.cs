@@ -1,6 +1,7 @@
 ﻿using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
+using DeploymentManager.Services.Commands;
 using DNI.Core.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,7 +24,8 @@ namespace DeploymentManager.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
-                .AddSingleton<IEnumerable<KeyValuePair<string, ICommand>>>(UtilityCommands.GetCommands())
+                .AddSingleton<IEnumerable<KeyValuePair<string, ICommand>>>(UtilityCommands.GetCommands()
+                    .Union(DeploymentManagementCommands.GetCommands()))
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))

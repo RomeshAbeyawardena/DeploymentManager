@@ -1,7 +1,9 @@
 ﻿using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Managers;
 using DeploymentManager.Domains;
+using DeploymentManager.Services.Commands;
 using DNI.Core.Services.Builders;
+using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeploymentManager.Services
+namespace DeploymentManager.Services.Commands
 {
-    public sealed class UtilityCommands
+    [IgnoreScanning]
+    public sealed class UtilityCommands : CommandBase
     {
         public static IDictionary<string, ICommand>
             GetCommands()
@@ -25,25 +28,15 @@ namespace DeploymentManager.Services
 
         private static async Task Quit(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
         {
-            var consoleWrapper = GetConsoleWrapper(serviceProvider);
+            var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);
             var appletSettingManager = GetService<IAppletSettingsManager>(serviceProvider);
             appletSettingManager.UpdateValue(appletSettings => appletSettings.IsRunning, false);
             await consoleWrapper.WriteLineAsync("Ok bye!");
         }
 
-        private static TService GetService<TService>(IServiceProvider serviceProvider)
-        {
-            return serviceProvider.GetRequiredService<TService>();
-        }
-
-        private static IConsoleWrapper<UtilityCommands> GetConsoleWrapper(IServiceProvider serviceProvider)
-        {
-            return GetService<IConsoleWrapper<UtilityCommands>>(serviceProvider);
-        }
-
         private static async Task Echo(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
         {
-            var consoleWrapper = GetConsoleWrapper(serviceProvider);
+            var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);
             await consoleWrapper.WriteLineAsync(string.Join(' ', arguments));
         }
     }
