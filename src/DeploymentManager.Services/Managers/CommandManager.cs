@@ -14,6 +14,12 @@ namespace DeploymentManager.Services.Managers
 {
     public class CommandManager : ICommandManager
     {
+        public CommandManager()
+            : this(null)
+        {
+
+        }
+
         public CommandManager(IEnumerable<KeyValuePair<string, ICommand>> values = null)
         {
             Dictionary = values == null 

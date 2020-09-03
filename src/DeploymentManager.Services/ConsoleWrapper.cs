@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Contracts;
+using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -68,6 +69,7 @@ namespace DeploymentManager.Services
         private readonly IServiceProvider serviceProvider;
     }
 
+    [IgnoreScanning]
     public class ConsoleWrapper<TLogger> : ConsoleWrapper, IConsoleWrapper<TLogger>
     {
         public ConsoleWrapper(IServiceProvider serviceProvider) 

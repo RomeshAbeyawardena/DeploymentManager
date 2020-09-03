@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Domains.Enumerations;
+using DNI.Core.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeploymentManager.Domains
 {
-    [Serializable]
+    [Serializable, IgnoreScanning]
     public class ConcurrencyException : Exception
     {
         public ConcurrencyException(ConcurrentAction action, string message) : base(message) { Action = action; }

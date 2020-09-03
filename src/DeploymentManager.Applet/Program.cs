@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DeploymentManager.Services;
 using DNI.Core.Contracts.Builders;
 using DNI.Core.Services.Builders;
@@ -10,9 +11,9 @@ namespace DeploymentManager.Applet
 {
     public static class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            BuildAppHost.ConfigureAppHost(appHost => appHost
+            await BuildAppHost.ConfigureAppHost(appHost => appHost
                 .ConfigureServices(ConfigureServices))
                 .Build<Startup>()
                 .UseStartup(async(startup) => await startup.RunAsync())

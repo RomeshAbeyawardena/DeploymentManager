@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Contracts;
+using DNI.Core.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeploymentManager.Domains
 {
+    [IgnoreScanning]
     public class Command : ICommand
     {
         public Command (
