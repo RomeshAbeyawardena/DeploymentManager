@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DNI.Core.Services" Version="0.0.0.40" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DeploymentManager.Contracts\DeploymentManager.Contracts.csproj" />
+    <ProjectReference Include="..\DeploymentManager.Domains\DeploymentManager.Domains.csproj" />
+    <ProjectReference Include="..\DeploymentManager.Shared\DeploymentManager.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
