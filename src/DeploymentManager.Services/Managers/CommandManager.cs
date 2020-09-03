@@ -46,7 +46,7 @@ namespace DeploymentManager.Services.Managers
             throw new ConcurrencyException(ConcurrentAction.Add, "Unable to add {commandName} to dictionary");
         }
 
-        ICommandManager ICommandManager.AddCommand(string commandName, Action<IEnumerable<string>, IEnumerable<IParameter>> action)
+        ICommandManager ICommandManager.AddCommand(string commandName, Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> action)
         {
             return Add(commandName, new Command(action));
         }
@@ -74,6 +74,11 @@ namespace DeploymentManager.Services.Managers
         public bool TryGetValue(string key, out ICommand value)
         {
             return dictionary.TryGetValue(key, out value);
+        }
+
+        public ICommandManager AddCommand(string commandName, Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> action)
+        {
+            return Add(commandName, new Command(action));
         }
 
         private ConcurrentDictionary<string, ICommand> dictionary => Dictionary as ConcurrentDictionary<string, ICommand>;

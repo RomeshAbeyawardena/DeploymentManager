@@ -12,10 +12,17 @@ namespace DeploymentManager.Domains
     public class Command : ICommand
     {
         public Command (
-            Action<IEnumerable<string>, IEnumerable<IParameter>> action)
+            Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> action)
         {
             Action = action;
         }
+
+        public Command (
+            Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> action)
+        {
+            ActionAsync = action;
+        }
+
 
         public Command (
             ICommand command,
@@ -24,11 +31,13 @@ namespace DeploymentManager.Domains
             )
         {
             Action = command.Action;
+            ActionAsync = command.ActionAsync;
             Parameters = parameters;
             Arguments = arguments;
         }
 
-        public Action<IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        public Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        public Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> ActionAsync { get; }
         public IEnumerable<IParameter> Parameters { get; }
         public IEnumerable<string> Arguments { get; }
     }

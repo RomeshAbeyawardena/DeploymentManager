@@ -8,7 +8,8 @@ namespace DeploymentManager.Contracts
 {
     public interface ICommand
     {
-        Action<IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> ActionAsync { get; }
         IEnumerable<IParameter> Parameters { get; }
         IEnumerable<string> Arguments { get; }
     }

@@ -5,6 +5,7 @@ using DeploymentManager.Domains;
 using DeploymentManager.Services;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,6 +22,7 @@ namespace DeploymentManager.Tests
             appletSettingsMock = new Mock<IAppletSettings>();
             applicationSettingsMock = new Mock<IApplicationSettings>();
             commandManagerMock = new Mock<ICommandManager>();
+            serviceProviderMock = new Mock<IServiceProvider>();
             applicationSettingsMock
                 .SetupGet(applicationSettings => applicationSettings.ParameterNameValueSeparator)
                 .Returns(":");
@@ -43,12 +45,12 @@ namespace DeploymentManager.Tests
             TestCase("echo banana -mix:blended apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet", "mix:blended" })]
         public void Parse(string input, string[] argumentsToValidate, string[] parametersToValidate)
         {
-            commandDictionary.Add("echo", new Command((arguments, parameters) =>
+            commandDictionary.Add("echo", new Command((serviceProvider, arguments, parameters) =>
             {
                 throw new SuccessException("triggered");
             }));
 
-            commandDictionary.Add("blahdeblah", new Command((arguments, parameters) =>
+            commandDictionary.Add("blahdeblah", new Command((serviceProvider, arguments, parameters) =>
             {
                 throw new IgnoreException("triggered");
             }));
@@ -75,9 +77,10 @@ namespace DeploymentManager.Tests
                 var parameterToValidateSplit = parameterToValidate.Split(':');
                 Assert.Contains(new Parameter(parameterToValidateSplit[0], parameterToValidateSplit[1]), parameters);
             }
-            command.Action(arguments, parameters);
+            command.Action(serviceProviderMock.Object, arguments, parameters);
         }
 
+        private Mock<IServiceProvider> serviceProviderMock;
         private Mock<IAppletSettings> appletSettingsMock;
         private IDictionary<string, ICommand> commandDictionary;
         private Mock<IApplicationSettings> applicationSettingsMock;

@@ -23,7 +23,7 @@ namespace DeploymentManager.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
-                .AddSingleton<IEnumerable<KeyValuePair<string, ICommand>>>(new List<KeyValuePair<string, ICommand>>())
+                .AddSingleton<IEnumerable<KeyValuePair<string, ICommand>>>(UtilityCommands.GetCommands())
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))

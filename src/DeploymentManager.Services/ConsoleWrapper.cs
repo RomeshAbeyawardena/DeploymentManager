@@ -19,17 +19,21 @@ namespace DeploymentManager.Services
 
         public Task<string> ReadLineAsync()
         {
-            return Task.Run(() => Console.ReadLine());
+            var input = Console.ReadLine();
+
+            return Task.FromResult(input);
         }
 
         public Task WriteAsync(string format, params object[] args)
         {
-            return Task.Run(() => Console.Write(format, args));
+            Console.Write(format, args);
+            return Task.CompletedTask;
         }
 
         public Task WriteLineAsync(string format, params object[] args)
         {
-            return Task.Run(() => Console.WriteLine(format, args));
+            Console.Write(format, args);
+            return Task.CompletedTask;
         }
 
         public Task WriteAsync<TLogger>(string format, bool outputToLog = true, LogLevel logLevel = LogLevel.Information, params object[] args)
@@ -47,6 +51,7 @@ namespace DeploymentManager.Services
             if (outputToLog)
             {
                 LogEvent<TLogger>(logger => logger.Log(logLevel, format, args));
+                return Task.CompletedTask;
             }
 
             return WriteLineAsync(format, args);

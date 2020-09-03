@@ -21,14 +21,15 @@ namespace DeploymentManager.Tests
             appletSettingsSubjectMock = new Mock<ISubject<IAppletSettings>>();
             sut = new AppletSettingsManager(appletSettingsSubjectMock.Object);
         }
-
+        
         [Test]
         public void UpdateValue()
         {
-            sut.UpdateValue(appletSetting => appletSetting.IsRunning, true);
-            appletSettingsSubjectMock.Setup(a => a.OnNext(It.IsAny<IAppletSettings>()))
+            appletSettingsSubjectMock.Setup(a => a.OnNext(It.IsAny<AppletSettings>()))
                 .Verifiable();
 
+            sut.UpdateValue(appletSetting => appletSetting.IsRunning, true);
+            
             appletSettingsSubjectMock.Verify();
         }
 

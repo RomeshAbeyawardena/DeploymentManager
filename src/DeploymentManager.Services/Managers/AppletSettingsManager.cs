@@ -36,6 +36,10 @@ namespace DeploymentManager.Services.Managers
             var memberName = member.Name;
 
             var property = member.DeclaringType.GetProperty(memberName);
+
+            if(property == null)
+                throw new NullReferenceException($"Property '{memberName}' not found");
+
             property.SetValue(appletSettings, newValue);
             appletSettingsSubject.OnNext(appletSettings);
         }

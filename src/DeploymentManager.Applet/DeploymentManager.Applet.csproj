@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="DNI.Core.Services" Version="0.0.0.40" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,6 +15,12 @@
     <ProjectReference Include="..\DeploymentManager.Domains\DeploymentManager.Domains.csproj" />
     <ProjectReference Include="..\DeploymentManager.Services\DeploymentManager.Services.csproj" />
     <ProjectReference Include="..\DeploymentManager.Shared\DeploymentManager.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
