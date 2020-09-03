@@ -13,5 +13,7 @@ namespace DeploymentManager.AppDomains.Models
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
         public string FullyQualifiedTargetReference { get; set; }
+
+        public TargetType Type { get; set; }
     }
 }
