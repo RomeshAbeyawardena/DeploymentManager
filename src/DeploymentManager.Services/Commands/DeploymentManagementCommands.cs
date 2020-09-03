@@ -43,6 +43,8 @@ namespace DeploymentManager.Services.Commands
                 RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
                 return RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
             }
+
+            return Task.CompletedTask;
         }
 
         private static Task RunTargetModule(IServiceProvider serviceProvider, IEnumerable<string> enumerable, IEnumerable<IParameter> parameters)
