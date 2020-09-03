@@ -12,4 +12,8 @@
     <Folder Include="Wrappers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DeploymentManager.AppDomains\DeploymentManager.AppDomains.csproj" />
+  </ItemGroup>
+
 </Project>
