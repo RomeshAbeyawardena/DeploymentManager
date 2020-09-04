@@ -1,6 +1,9 @@
 ﻿using DeploymentManager.Contracts;
+using DeploymentManager.Contracts.Factories;
+using DeploymentManager.Contracts.Modules;
 using DeploymentManager.Contracts.Services;
 using DeploymentManager.Domains;
+using DeploymentManager.Services.Modules;
 using DeploymentManager.Shared;
 using DNI.Core.Services.Builders;
 using DNI.Core.Shared.Attributes;
@@ -24,32 +27,40 @@ namespace DeploymentManager.Services.Commands
                 .Dictionary;
         }
 
+        private static IDeploymentService GetDeploymentService(IServiceProvider serviceProvider)
+        {
+            return GetService<IDeploymentService>(serviceProvider);
+        }
+
         private static Task Deployment(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
         {
-            var deploymentService = GetService<IDeploymentService>(serviceProvider);
+            var deploymentService = GetDeploymentService(serviceProvider);
 
+            var remainingArguments = arguments.RemoveAt(0);
             if(arguments.FirstOrDefault() == "target")
             {
-                return RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
+                return RunModule<TargetModule>(serviceProvider, remainingArguments, parameters);
             }
 
             if(arguments.FirstOrDefault() == "deployment")
             {
-                return RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
+                return RunModule<DeploymentModule>(serviceProvider, remainingArguments, parameters);
             }
 
             if(arguments.FirstOrDefault() == "schedule")
             {
-                RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
-                return RunTargetModule(serviceProvider, arguments.RemoveAt(0), parameters);
+                
+                return RunModule<ScheduleModule>(serviceProvider, remainingArguments, parameters);
             }
 
             return Task.CompletedTask;
         }
 
-        private static Task RunTargetModule(IServiceProvider serviceProvider, IEnumerable<string> enumerable, IEnumerable<IParameter> parameters)
+        private static Task RunModule<TModule>(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
+            where TModule : class, IModule
         {
-            throw new NotImplementedException();
+            var moduleFactory = GetService<IModuleFactory>(serviceProvider);
+            return moduleFactory.GetModule<TModule>().ExecuteRequest(arguments, parameters);
         }
     }
 }
