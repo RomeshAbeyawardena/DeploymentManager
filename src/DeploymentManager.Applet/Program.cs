@@ -23,7 +23,8 @@ namespace DeploymentManager.Applet
                     .AddJsonFile("appSettings.json")
                     .AddCommandLine(args))
                 .Build<Startup>()
-                .UseStartup(async(startup) => await startup.RunAsync(CancellationToken.None), async(startup, cancellationToken) => await startup.StopAsync(cancellationToken))
+                .UseStartup(startingAsyncMethod: async(startup, cancellationToken) => await startup.RunAsync(cancellationToken), 
+                            stoppingAsyncMethod: async(startup, cancellationToken) => await startup.StopAsync(cancellationToken))
                 .StartAsync();
         }
 

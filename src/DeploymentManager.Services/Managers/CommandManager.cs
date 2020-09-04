@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeploymentManager.Services.Managers
@@ -76,7 +77,8 @@ namespace DeploymentManager.Services.Managers
             return dictionary.TryGetValue(key, out value);
         }
 
-        public ICommandManager AddCommand(string commandName, Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> action)
+        public ICommandManager AddCommand(string commandName, 
+            Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> action)
         {
             return Add(commandName, new Command(action));
         }

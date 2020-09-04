@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeploymentManager.Services.Commands
@@ -26,7 +27,8 @@ namespace DeploymentManager.Services.Commands
                 .Dictionary;
         }
 
-        private static async Task Quit(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
+        private static async Task Quit(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+            IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);
             var appletSettingManager = GetService<IAppletSettingsManager>(serviceProvider);
@@ -34,7 +36,8 @@ namespace DeploymentManager.Services.Commands
             await consoleWrapper.WriteLineAsync("Ok bye!");
         }
 
-        private static async Task Echo(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
+        private static async Task Echo(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+            IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);
             await consoleWrapper.WriteLineAsync(string.Join(' ', arguments));

@@ -14,6 +14,12 @@ namespace DeploymentManager.Services.Factories
 {
     public class ModuleFactory : IModuleFactory
     {
+        public ModuleFactory(IServiceProvider serviceProvider, Action<IServiceProvider, IModuleFactory> populateModules)
+        {
+            dictionary = new ConcurrentDictionary<string, IModule>();
+            populateModules(serviceProvider, this);
+        }
+
         IModule IReadOnlyDictionary<string, IModule>.this[string key] => dictionary[key];
 
         IEnumerable<string> IReadOnlyDictionary<string, IModule>.Keys => dictionary.Keys;

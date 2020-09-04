@@ -7,10 +7,12 @@ using DeploymentManager.Services.Modules;
 using DeploymentManager.Shared;
 using DNI.Core.Services.Builders;
 using DNI.Core.Shared.Attributes;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeploymentManager.Services.Commands
@@ -23,44 +25,33 @@ namespace DeploymentManager.Services.Commands
         {
             return DictionaryBuilder
                 .Create<string, ICommand>()
-                .Add("deployment", new Command(Deployment))
+                .Add("manage", new Command(Deployment))
                 .Dictionary;
         }
 
-        private static IDeploymentService GetDeploymentService(IServiceProvider serviceProvider)
+        private static Task Deployment(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+            IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
-            return GetService<IDeploymentService>(serviceProvider);
-        }
-
-        private static Task Deployment(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
-        {
-            var deploymentService = GetDeploymentService(serviceProvider);
+            var consoleWrapper = GetConsoleWrapper<DeploymentManagementCommands>(serviceProvider);
 
             var remainingArguments = arguments.RemoveAt(0);
             if(arguments.FirstOrDefault() == "target")
             {
-                return RunModule<TargetModule>(serviceProvider, remainingArguments, parameters);
+                return RunModule<TargetModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "deployment")
             {
-                return RunModule<DeploymentModule>(serviceProvider, remainingArguments, parameters);
+                return RunModule<DeploymentModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "schedule")
             {
                 
-                return RunModule<ScheduleModule>(serviceProvider, remainingArguments, parameters);
+                return RunModule<ScheduleModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
-            return Task.CompletedTask;
-        }
-
-        private static Task RunModule<TModule>(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters)
-            where TModule : class, IModule
-        {
-            var moduleFactory = GetService<IModuleFactory>(serviceProvider);
-            return moduleFactory.GetModule<TModule>().ExecuteRequest(arguments, parameters);
+            return consoleWrapper.WriteLineAsync("Management request not found", true, LogLevel.Warning);
         }
     }
 }

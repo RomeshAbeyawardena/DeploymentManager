@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeploymentManager.Contracts.Modules
 {
     public interface IModule
     {
-        Task ExecuteRequest(IEnumerable<string> arguments, IEnumerable<IParameter> parameters);
+        Task ExecuteRequest(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken);
     }
 }

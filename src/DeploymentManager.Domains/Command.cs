@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DeploymentManager.Domains
@@ -18,7 +19,7 @@ namespace DeploymentManager.Domains
         }
 
         public Command (
-            Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> action)
+            Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> action)
         {
             ActionAsync = action;
         }
@@ -37,7 +38,7 @@ namespace DeploymentManager.Domains
         }
 
         public Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
-        public Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, Task> ActionAsync { get; }
+        public Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> ActionAsync { get; }
         public IEnumerable<IParameter> Parameters { get; }
         public IEnumerable<string> Arguments { get; }
     }
