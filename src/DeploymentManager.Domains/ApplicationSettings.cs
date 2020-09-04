@@ -16,5 +16,6 @@ namespace DeploymentManager.Domains
         }
         public string ParameterSeparator { get; set; }
         public string ParameterNameValueSeparator { get; set; }
+        public int DefaultDurationInDays { get; set; }
     }
 }

@@ -12,5 +12,8 @@ namespace DeploymentManager.Contracts.Services
     {
         Task<Deployment> GetDeploymentAsync(int deploymentId, CancellationToken cancellationToken);
         Task<Deployment> GetDeploymentAsync(string deploymentReference, CancellationToken cancellationToken);
+        Task<IEnumerable<Deployment>> GetDeploymentsAsync(CancellationToken cancellationToken, IDateRange<DateTimeOffset> scheduledDateRange = null, 
+            IDateRange<DateTimeOffset> completedDateRange = null);
+        Task<bool> TryAddDeployment(Deployment deployment, CancellationToken cancellationToken);
     }
 }

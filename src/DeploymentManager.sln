@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.AppDomains", "DeploymentManager.AppDomains\DeploymentManager.AppDomains.csproj", "{8716722A-4878-4879-88F0-20F3B65BE8FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Data", "DeploymentManager.Data\DeploymentManager.Data.csproj", "{750AEA1A-94D2-4FAA-91EB-9013E8515453}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,17 @@ Global
 		{8716722A-4878-4879-88F0-20F3B65BE8FF}.Release|x64.Build.0 = Release|Any CPU
 		{8716722A-4878-4879-88F0-20F3B65BE8FF}.Release|x86.ActiveCfg = Release|Any CPU
 		{8716722A-4878-4879-88F0-20F3B65BE8FF}.Release|x86.Build.0 = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|x64.Build.0 = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Debug|x86.Build.0 = Debug|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x64.ActiveCfg = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x64.Build.0 = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x86.ActiveCfg = Release|Any CPU
+		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

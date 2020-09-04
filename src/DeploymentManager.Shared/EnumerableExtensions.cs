@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeploymentManager.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,11 @@ namespace DeploymentManager.Shared
             var valueList = values.ToList();
             valueList.RemoveAt(index);
             return valueList;
+        }
+        
+        public static IDictionary<string, string> ToDictionary(this IEnumerable<IParameter> parameters)
+        {
+            return parameters.ToDictionary(parameter => parameter.Name, parameter => parameter.Value);
         }
     }
 }

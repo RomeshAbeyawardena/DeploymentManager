@@ -42,7 +42,8 @@ namespace DeploymentManager.Tests
             TestCase("echo beans toast -type:grilled", new[] { "beans", "toast" }, new string[] { "type:grilled" }),
             TestCase("echo banana apple orange -style:fruitsalad", new[] { "banana", "apple", "orange" }, new string[] { "style:fruitsalad" }),
             TestCase("echo banana apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet" }),
-            TestCase("echo banana -mix:blended apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet", "mix:blended" })]
+            TestCase("echo banana -mix:blended apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet", "mix:blended" }),
+            TestCase("echo -yes", new string[] {  }, new string[] {"yes" })]
         public void Parse(string input, string[] argumentsToValidate, string[] parametersToValidate)
         {
             commandDictionary.Add("echo", new Command((serviceProvider, arguments, parameters) =>
@@ -75,7 +76,15 @@ namespace DeploymentManager.Tests
             foreach (var parameterToValidate in parametersToValidate)
             {
                 var parameterToValidateSplit = parameterToValidate.Split(':');
-                Assert.Contains(new Parameter(parameterToValidateSplit[0], parameterToValidateSplit[1]), parameters);
+                if(parameterToValidateSplit.Length == 1)
+                {
+                    Assert.Contains(new Parameter(parameterToValidateSplit[0], string.Empty), parameters);
+                }
+                else
+                {
+                    Assert.Contains(new Parameter(parameterToValidateSplit[0], parameterToValidateSplit[1]), parameters);
+                }
+                
             }
             command.Action(serviceProviderMock.Object, arguments, parameters);
         }

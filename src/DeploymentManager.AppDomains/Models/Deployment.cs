@@ -17,5 +17,6 @@ namespace DeploymentManager.AppDomains.Models
 
         public Target Target { get; set; }
         public Transaction Transaction { get; set; }
+        public string Reference { get; set; }
     }
 }
