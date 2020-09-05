@@ -13,5 +13,6 @@ namespace DeploymentManager.Contracts.Services
         Task<Target> GetTargetAsync(string reference, CancellationToken cancellationToken);
         Task<Target> GetTargetAsync(int targetId, CancellationToken cancellationToken);
         Task<IEnumerable<Target>> GetTargetsAsync(int? targetTypeId, CancellationToken cancellationToken);
+        Task<bool> TryAddAsync(Target target, CancellationToken cancellationToken);
     }
 }

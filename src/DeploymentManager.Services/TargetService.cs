@@ -1,5 +1,7 @@
 ﻿using DeploymentManager.AppDomains.Models;
 using DeploymentManager.Contracts.Services;
+using DNI.Core.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +13,45 @@ namespace DeploymentManager.Services
 {
     public class TargetService : ITargetService
     {
+        public TargetService(IAsyncRepository<Target> targetRepository)
+        {
+            this.targetRepository = targetRepository;
+        }
+
         public Task<Target> GetTargetAsync(int targetId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return targetRepository.FindAsync(cancellationToken, targetId);
         }
 
         public Task<Target> GetTargetAsync(string reference, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return GetTargetByReference(targetRepository.Query, reference).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<Target>> GetTargetsAsync(int? targetTypeId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Target>> GetTargetsAsync(int? targetTypeId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var query = targetRepository.Query;
+            if (targetTypeId.HasValue)
+            {
+                return await query.Where(target => target.TargetTypeId == targetTypeId).ToArrayAsync(cancellationToken);
+            }
+
+            return await query.ToArrayAsync(cancellationToken);
         }
+
+        public async Task<bool> TryAddAsync(Target target, CancellationToken cancellationToken)
+        {
+            if(await GetTargetAsync(target.Reference, cancellationToken) == null)
+            {
+                var affectedRows = await targetRepository.SaveChangesAsync(target, cancellationToken);
+                return affectedRows > 0;
+            }
+
+            return false;
+        }
+
+        private IQueryable<Target> GetTargetByReference(IQueryable<Target> query, string reference) 
+            => query.Where(target => target.Reference == reference);
+        private readonly IAsyncRepository<Target> targetRepository;
     }
 }

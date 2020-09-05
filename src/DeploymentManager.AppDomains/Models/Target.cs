@@ -17,5 +17,6 @@ namespace DeploymentManager.AppDomains.Models
         public string FullyQualifiedTargetReference { get; set; }
 
         public TargetType Type { get; set; }
+        public string Reference { get; set; }
     }
 }

@@ -39,7 +39,9 @@ namespace DeploymentManager.Services.Modules
                 return DefaultAction?.Invoke(firstArgument, remainingArguments, parameters, cancellationToken);
             }
             
-            return Task.CompletedTask;}, exception => { var moduleException = exception as ModuleException; return WriteLineAsyncAction(exception.Message, moduleException.Arguments, moduleException.LogLevel); },
+            return Task.CompletedTask;}, exception => { 
+                var moduleException = exception as ModuleException; 
+                return WriteLineAsyncAction(exception.Message, moduleException.Arguments, moduleException.LogLevel); },
                 exceptionTypes => exceptionTypes.DescribeType<ModuleException>());
             
         }

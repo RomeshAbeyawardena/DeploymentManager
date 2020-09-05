@@ -73,6 +73,14 @@ namespace DeploymentManager.Services.Modules
 
         private async Task AddTarget(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
+            var firstArgument = arguments.FirstOrDefault();
+
+            if(!string.IsNullOrEmpty(firstArgument) && firstArgument.Equals("type"))
+            {
+                await AddTaskType(arguments.RemoveAt(0), parameters, cancellationToken);
+                return;
+            }
+
             var parametersDictionary = parameters.ToDictionary();
             var targetType = await GetTargetTypeFromParameters(parametersDictionary, cancellationToken);
 
@@ -104,6 +112,31 @@ namespace DeploymentManager.Services.Modules
                 || string.IsNullOrEmpty(target.DatabaseName))
             {
                 throw ModuleException("A connection string or database name must be supplied", LogLevel.Error);
+            }
+
+            if (string.IsNullOrEmpty(target.FullyQualifiedTargetReference))
+            {
+                throw ModuleException("A fully qualified target reference must be supplied", LogLevel.Error);
+            }
+
+            if(await targetService.TryAddAsync(target, cancellationToken))
+            {
+                await consoleWrapper.WriteLineAsync("Deployment saved", true, LogLevel.Error);
+            }
+            else
+            {
+                throw ModuleException("Deployment not saved", LogLevel.Error);
+            }
+
+        }
+
+        private Task AddTaskType(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
+        {
+            var firstArgument = arguments.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(firstArgument))
+            {
+                throw ModuleException("Task type requires a name", LogLevel.Error);
             }
         }
 
