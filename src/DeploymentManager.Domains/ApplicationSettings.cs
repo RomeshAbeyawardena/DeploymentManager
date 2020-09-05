@@ -13,9 +13,12 @@ namespace DeploymentManager.Domains
         public ApplicationSettings(IConfiguration configuration)
         {
             configuration.Bind(this);
+            DefaultConnectionString = configuration.GetConnectionString("default");
         }
+
         public string ParameterSeparator { get; set; }
         public string ParameterNameValueSeparator { get; set; }
         public int DefaultDurationInDays { get; set; }
+        public string DefaultConnectionString { get; set; }
     }
 }

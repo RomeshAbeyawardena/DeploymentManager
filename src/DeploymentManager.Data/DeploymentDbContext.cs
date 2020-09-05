@@ -13,5 +13,7 @@ namespace DeploymentManager.Data
         }
 
         public DbSet<Deployment> Deployments { get; set; }
+        public DbSet<Target> Targets { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

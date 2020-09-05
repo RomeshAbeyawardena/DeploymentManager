@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeploymentManager.Contracts\DeploymentManager.Contracts.csproj" />
+    <ProjectReference Include="..\DeploymentManager.Data\DeploymentManager.Data.csproj" />
     <ProjectReference Include="..\DeploymentManager.Domains\DeploymentManager.Domains.csproj" />
     <ProjectReference Include="..\DeploymentManager.Shared\DeploymentManager.Shared.csproj" />
   </ItemGroup>

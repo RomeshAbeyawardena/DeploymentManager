@@ -6,7 +6,10 @@ using DeploymentManager.Domains;
 using DeploymentManager.Services.Commands;
 using DeploymentManager.Services.Modules;
 using DNI.Core.Contracts;
+using DNI.Core.Contracts.Builders;
 using DNI.Core.Services.Builders;
+using DNI.Core.Services.Extensions;
+using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,9 +18,10 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
-
+using DataServiceRegistration = DeploymentManager.Data.ServiceRegistration;
 namespace DeploymentManager.Services
 {
+    [IgnoreScanning]
     public class ServiceRegistration : IServiceRegistration
     {
         private ServiceRegistration()
@@ -27,6 +31,8 @@ namespace DeploymentManager.Services
 
         public void RegisterServices(IServiceCollection services)
         {
+            DataServiceRegistration.Register(services);
+
             services
                 .AddSingleton<Action<IServiceProvider, IModuleFactory>>((serviceProvider, moduleFactory) => moduleFactory
                     .Add(serviceProvider.GetRequiredService<IDeploymentModule>() as DeploymentModule)
@@ -37,7 +43,7 @@ namespace DeploymentManager.Services
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))
-                .Scan(scanner => scanner
+                .RegisterServices(BuildSecurityProfiles, scannerConfiguration: scanner => scanner
                 .FromAssemblyOf<ServiceRegistration>()
                 .AddClasses(filter => filter.WithoutAttribute<DNI.Core.Shared.Attributes.IgnoreScanningAttribute>())
                 .AsMatchingInterface());
@@ -46,6 +52,11 @@ namespace DeploymentManager.Services
             {
                 Debug.WriteLine("{0}: {1}", service.ServiceType.Name, service.ImplementationType?.Name);
             }
+        }
+
+        private void BuildSecurityProfiles(IServiceProvider arg1, IEncryptionProfileDictionaryBuilder arg2)
+        {
+            
         }
 
         public static void Register(IServiceCollection services)

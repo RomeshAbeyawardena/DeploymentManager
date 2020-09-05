@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="DNI.Core.Services" Version="0.0.0.40" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DeploymentManager.AppDomains\DeploymentManager.AppDomains.csproj" />
+    <ProjectReference Include="..\DeploymentManager.Contracts\DeploymentManager.Contracts.csproj" />
   </ItemGroup>
 </Project>
