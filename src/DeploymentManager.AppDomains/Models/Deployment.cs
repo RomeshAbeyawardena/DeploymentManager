@@ -15,6 +15,7 @@ namespace DeploymentManager.AppDomains.Models
         public int Id { get; set; }
         public int TargetId { get; set; }
         public int TransactionId { get; set; }
+
         [GeneratedDefaultValue(nameof(Generators.DateTimeOffSetValueGenerator))]
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset? Scheduled { get; set; }

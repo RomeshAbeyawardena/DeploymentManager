@@ -77,7 +77,7 @@ namespace DeploymentManager.Services.Modules
 
             if(!string.IsNullOrEmpty(firstArgument) && firstArgument.Equals("type"))
             {
-                await AddTaskType(arguments.RemoveAt(0), parameters, cancellationToken);
+                await AddTargetType(arguments.RemoveAt(0), parameters, cancellationToken);
                 return;
             }
 
@@ -89,9 +89,10 @@ namespace DeploymentManager.Services.Modules
                 throw ModuleException("Target type {0} not found", LogLevel.Error);
             }
 
-            var target = new Target();
-
-            target.TargetTypeId = targetType.Id;
+            var target = new Target
+            {
+                TargetTypeId = targetType.Id
+            };
 
             if (parametersDictionary.TryGetValue("connectionString", out var connectionString))
             {
@@ -130,13 +131,32 @@ namespace DeploymentManager.Services.Modules
 
         }
 
-        private Task AddTaskType(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
+        private async Task AddTargetType(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var firstArgument = arguments.FirstOrDefault();
-
+            var parameterDictionary = parameters.ToDictionary();
             if (string.IsNullOrEmpty(firstArgument))
             {
-                throw ModuleException("Task type requires a name", LogLevel.Error);
+                throw ModuleException("Target type requires a name", LogLevel.Error);
+            }
+
+            var targetType = new TargetType
+            {
+                Name = firstArgument
+            };
+
+            if(parameterDictionary.TryGetValue("description", out var description))
+            {
+                targetType.Description = description;
+            }
+
+            if(await targetTypeService.TryAddAsync(targetType, cancellationToken))
+            {
+                await consoleWrapper.WriteLineAsync("Target type saved", true, LogLevel.Error);
+            }
+            else
+            {
+                throw ModuleException("Target type not saved", LogLevel.Error);
             }
         }
 

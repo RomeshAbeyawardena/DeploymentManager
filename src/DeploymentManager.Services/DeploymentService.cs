@@ -2,6 +2,7 @@
 using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Services;
 using DeploymentManager.Contracts.Settings;
+using DeploymentManager.Shared.Exceptions;
 using DNI.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -65,7 +66,7 @@ namespace DeploymentManager.Services
                 return affectedRows > 0;
             }
 
-            return false;
+            throw new DataValidationException($"A deployment with the reference '{ deployment.Reference }' already exists");
         }
 
         private IQueryable<Deployment> FindByReference(IQueryable<Deployment> queryable, string reference) => queryable

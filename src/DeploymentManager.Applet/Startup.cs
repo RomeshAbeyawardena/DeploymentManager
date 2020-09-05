@@ -1,8 +1,10 @@
 ﻿using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Managers;
 using DeploymentManager.Contracts.Settings;
+using DNI.Core.Contracts.Managers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,8 +18,12 @@ namespace DeploymentManager.Applet
             IServiceProvider serviceProvider,
             IConsoleWrapper<Startup> consoleWrapper, 
             IAppletSettingsManager appletSettingsManager, 
+            IValueGeneratorManager valueGeneratorManager,
             ICommandParser commandParser)
         {
+            foreach(var (key, value) in valueGeneratorManager){
+            Debug.WriteLine("{0}: {1}", key, value.Name);
+                    }
             this.serviceProvider = serviceProvider;
             this.consoleWrapper = consoleWrapper;
             appletSettingsChangedSubscriber = appletSettingsManager.AppletSettingsChanged(AppletSettingsChanged);

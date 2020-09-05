@@ -12,5 +12,6 @@ namespace DeploymentManager.Contracts.Services
     {
         Task<TargetType> GetTargetType(int targetTypeId, CancellationToken cancellationToken);
         Task<TargetType> GetTargetType(string targetTypeName, CancellationToken cancellationToken);
+        Task<bool> TryAddAsync(TargetType targetType, CancellationToken cancellationToken);
     }
 }

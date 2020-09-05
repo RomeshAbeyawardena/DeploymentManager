@@ -1,5 +1,6 @@
 ﻿using DeploymentManager.AppDomains.Models;
 using DeploymentManager.Contracts.Services;
+using DeploymentManager.Shared.Exceptions;
 using DNI.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,7 +48,7 @@ namespace DeploymentManager.Services
                 return affectedRows > 0;
             }
 
-            return false;
+            throw new DataValidationException($"A target with the reference '{ target.Reference }' already exists");
         }
 
         private IQueryable<Target> GetTargetByReference(IQueryable<Target> query, string reference) 
