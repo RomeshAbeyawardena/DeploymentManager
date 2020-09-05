@@ -5,6 +5,7 @@ using DeploymentManager.Contracts.Services;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
 using DeploymentManager.Shared.Extensions;
+using DNI.Core.Contracts;
 using DNI.Core.Services.Builders;
 using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.Internal;
@@ -21,11 +22,13 @@ namespace DeploymentManager.Services.Modules
     public class DeploymentModule : ModuleBase, IDeploymentModule
     {
         public DeploymentModule(
+            IExceptionHandler exceptionHandler,
             IApplicationSettings applicationSettings,
             ISystemClock systemClock,
             IConsoleWrapper<DeploymentModule> consoleWrapper,
             ITargetService targetService,
             IDeploymentService deploymentService)
+            : base(exceptionHandler)
         {
             ActionDictionary
                 .Add(builder => builder.Add("add", AddDeployment)
@@ -45,8 +48,7 @@ namespace DeploymentManager.Services.Modules
             var parametersDictionary = parameters.ToDictionary();
             if (string.IsNullOrEmpty(firstArgument))
             {
-                await consoleWrapper.WriteLineAsync("Invalid argument", true, LogLevel.Error);
-                return;
+                throw ModuleException("Invalid arguments", LogLevel.Error);
             }
 
             var deployment = new Deployment
@@ -56,17 +58,15 @@ namespace DeploymentManager.Services.Modules
 
             if(!parametersDictionary.TryGetValue("target", out var targetReference))
             {
-                await consoleWrapper.WriteLineAsync("A valid -target:targetReference parameter was expected", true, LogLevel.Error);
-                return;
+                throw ModuleException("A valid -target:targetReference parameter was expected", LogLevel.Error);
             }
 
-            var target = await targetService.GetTarget(targetReference, cancellationToken);
+            var target = await targetService.GetTargetAsync(targetReference, cancellationToken);
 
             if(target == null)
             {
-                await consoleWrapper
-                        .WriteLineAsync("A target with the reference {0} could not be found. Use \"manage target add\" to create new targets", true, LogLevel.Error, targetReference);
-                return;
+                throw ModuleException("A target with the reference {0} could not be found. Use \"manage target add\" to create new targets", 
+                    LogLevel.Error, targetReference);
             }
 
             if (parametersDictionary.TryGetValue("scheduled", out var scheduled)
@@ -81,7 +81,8 @@ namespace DeploymentManager.Services.Modules
             }
             else
             { 
-                await consoleWrapper.WriteLineAsync("Deployment not saved", true, LogLevel.Error);
+                throw ModuleException("Deployment not saved", LogLevel.Error);
+                
             }
         }
 
@@ -157,8 +158,7 @@ namespace DeploymentManager.Services.Modules
 
             if (deployment == null)
             {
-                await consoleWrapper.WriteLineAsync("Deployment");
-                return;
+                throw ModuleException("Deployment with the reference '{0}' not found", LogLevel.Error, deploymentIdentifier);
             }
 
             await DisplayDeployment(deployment);

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DNI.Core.Services" Version="0.0.0.40" />
-    <PackageReference Include="DNI.Core.Shared" Version="0.0.0.40" />
+    <PackageReference Include="DNI.Core.Services" Version="0.0.0.41" />
+    <PackageReference Include="DNI.Core.Shared" Version="0.0.0.41" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 

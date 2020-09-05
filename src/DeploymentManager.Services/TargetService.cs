@@ -11,17 +11,17 @@ namespace DeploymentManager.Services
 {
     public class TargetService : ITargetService
     {
-        public Task<Target> GetTarget(int targetId, CancellationToken cancellationToken)
+        public Task<Target> GetTargetAsync(int targetId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Target> GetTarget(string reference, CancellationToken cancellationToken)
+        public Task<Target> GetTargetAsync(string reference, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Target>> GetTargets(int? targetTypeId, CancellationToken cancellationToken)
+        public Task<IEnumerable<Target>> GetTargetsAsync(int? targetTypeId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
