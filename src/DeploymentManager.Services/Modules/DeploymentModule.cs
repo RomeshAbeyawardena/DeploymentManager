@@ -4,7 +4,7 @@ using DeploymentManager.Contracts.Modules;
 using DeploymentManager.Contracts.Services;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
-using DeploymentManager.Shared;
+using DeploymentManager.Shared.Extensions;
 using DNI.Core.Services.Builders;
 using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.Internal;
@@ -18,23 +18,24 @@ using System.Threading.Tasks;
 
 namespace DeploymentManager.Services.Modules
 {
-    public class DeploymentModule : IDeploymentModule
+    public class DeploymentModule : ModuleBase, IDeploymentModule
     {
         public DeploymentModule(
             IApplicationSettings applicationSettings,
             ISystemClock systemClock,
-            IConsoleWrapper<DeploymentModule> consoleWrapper, IDeploymentService deploymentService)
+            IConsoleWrapper<DeploymentModule> consoleWrapper,
+            ITargetService targetService,
+            IDeploymentService deploymentService)
         {
+            ActionDictionary
+                .Add(builder => builder.Add("add", AddDeployment)
+                .Add("list", ListDeployments));
+            DefaultAction = GetDeployment;
+
             this.applicationSettings = applicationSettings;
             this.systemClock = systemClock;
-            actionDictionary = DictionaryBuilder
-                                    .Create<string, Func<IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task>>(builder =>
-                                        builder
-                                            .Add("add", AddDeployment)
-                                            .Add("list", ListDeployments))
-                                    .Dictionary;
-
             this.consoleWrapper = consoleWrapper;
+            this.targetService = targetService;
             this.deploymentService = deploymentService;
         }
 
@@ -48,8 +49,25 @@ namespace DeploymentManager.Services.Modules
                 return;
             }
 
-            var deployment = new Deployment();
-            deployment.Reference = firstArgument;
+            var deployment = new Deployment
+            {
+                Reference = firstArgument
+            };
+
+            if(!parametersDictionary.TryGetValue("target", out var targetReference))
+            {
+                await consoleWrapper.WriteLineAsync("A valid -target:targetReference parameter was expected", true, LogLevel.Error);
+                return;
+            }
+
+            var target = await targetService.GetTarget(targetReference, cancellationToken);
+
+            if(target == null)
+            {
+                await consoleWrapper
+                        .WriteLineAsync("A target with the reference {0} could not be found. Use \"manage target add\" to create new targets", true, LogLevel.Error, targetReference);
+                return;
+            }
 
             if (parametersDictionary.TryGetValue("scheduled", out var scheduled)
                 && DateTimeOffset.TryParse(scheduled, out var scheduledDate))
@@ -60,7 +78,6 @@ namespace DeploymentManager.Services.Modules
             if (await deploymentService.TryAddDeployment(deployment, cancellationToken))
             {
                 await consoleWrapper.WriteLineAsync("Deployment saved", true, LogLevel.Error);
-                return;
             }
             else
             { 
@@ -147,29 +164,6 @@ namespace DeploymentManager.Services.Modules
             await DisplayDeployment(deployment);
         }
 
-        public Task ExecuteRequest(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
-        {
-            var firstArgument = arguments.FirstOrDefault();
-
-            if (firstArgument == null)
-            {
-                consoleWrapper.WriteLineAsync("Invalid arguments");
-                return Task.CompletedTask;
-            }
-
-            var remainingArguments = arguments.RemoveAt(0);
-            if (actionDictionary.TryGetValue(firstArgument, out var action))
-            {
-                action(remainingArguments, parameters, cancellationToken);
-            }
-            else
-            {
-                return GetDeployment(firstArgument, remainingArguments, parameters, cancellationToken);
-            }
-
-            return Task.CompletedTask;
-        }
-
         private Task DisplayDeployment(Deployment deployment)
         {
             return consoleWrapper.WriteLineAsync("Id: {0}\r\nReference: {1}\r\nCreated: {2}\r\nScheduled: {3}\r\nCompleted: {4}\r\n\r\n",
@@ -183,8 +177,9 @@ namespace DeploymentManager.Services.Modules
 
         private readonly IApplicationSettings applicationSettings;
         private readonly ISystemClock systemClock;
-        private IDictionary<string, Func<IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task>> actionDictionary;
+        
         private readonly IConsoleWrapper<DeploymentModule> consoleWrapper;
+        private readonly ITargetService targetService;
         private readonly IDeploymentService deploymentService;
     }
 }

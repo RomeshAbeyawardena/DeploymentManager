@@ -5,6 +5,7 @@ using DeploymentManager.Contracts.Services;
 using DeploymentManager.Domains;
 using DeploymentManager.Services.Modules;
 using DeploymentManager.Shared;
+using DeploymentManager.Shared.Extensions;
 using DNI.Core.Services.Builders;
 using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 namespace DeploymentManager.Services.Commands
 {
     [IgnoreScanning]
-    public class DeploymentManagementCommands : CommandBase
+    public class ManagementCommands : CommandBase
     {
         public static IDictionary<string, ICommand>
             GetCommands()
@@ -32,7 +33,7 @@ namespace DeploymentManager.Services.Commands
         private static Task Deployment(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
             IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
-            var consoleWrapper = GetConsoleWrapper<DeploymentManagementCommands>(serviceProvider);
+            var consoleWrapper = GetConsoleWrapper<ManagementCommands>(serviceProvider);
 
             var remainingArguments = arguments.RemoveAt(0);
             if(arguments.FirstOrDefault() == "target")

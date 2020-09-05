@@ -3,6 +3,7 @@ using DeploymentManager.Contracts.Managers;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
 using DeploymentManager.Shared;
+using DeploymentManager.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,23 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Contracts", "DeploymentManager.Contracts\DeploymentManager.Contracts.csproj", "{FD15CAF2-3DD7-4F8D-BB6D-839A42FBC61C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Contracts", "DeploymentManager.Contracts\DeploymentManager.Contracts.csproj", "{FD15CAF2-3DD7-4F8D-BB6D-839A42FBC61C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Domains", "DeploymentManager.Domains\DeploymentManager.Domains.csproj", "{CEE603D6-BE4B-4B0E-BA4E-BE62BB6B8B3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Domains", "DeploymentManager.Domains\DeploymentManager.Domains.csproj", "{CEE603D6-BE4B-4B0E-BA4E-BE62BB6B8B3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Services", "DeploymentManager.Services\DeploymentManager.Services.csproj", "{27F37930-8851-4B79-AE75-607D7F012B78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Services", "DeploymentManager.Services\DeploymentManager.Services.csproj", "{27F37930-8851-4B79-AE75-607D7F012B78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Applet", "DeploymentManager.Applet\DeploymentManager.Applet.csproj", "{16E491C2-89FB-4C9E-913E-BC5D1A861CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Applet", "DeploymentManager.Applet\DeploymentManager.Applet.csproj", "{16E491C2-89FB-4C9E-913E-BC5D1A861CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Shared", "DeploymentManager.Shared\DeploymentManager.Shared.csproj", "{C4A72880-4685-4832-B33B-E5ADF81A304B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Shared", "DeploymentManager.Shared\DeploymentManager.Shared.csproj", "{C4A72880-4685-4832-B33B-E5ADF81A304B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Tests", "DeploymentManager.Tests\DeploymentManager.Tests.csproj", "{82D42AAE-BD74-4743-92C9-0E83925AE7CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Tests", "DeploymentManager.Tests\DeploymentManager.Tests.csproj", "{82D42AAE-BD74-4743-92C9-0E83925AE7CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.AppDomains", "DeploymentManager.AppDomains\DeploymentManager.AppDomains.csproj", "{8716722A-4878-4879-88F0-20F3B65BE8FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.AppDomains", "DeploymentManager.AppDomains\DeploymentManager.AppDomains.csproj", "{8716722A-4878-4879-88F0-20F3B65BE8FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentManager.Data", "DeploymentManager.Data\DeploymentManager.Data.csproj", "{750AEA1A-94D2-4FAA-91EB-9013E8515453}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeploymentManager.Data", "DeploymentManager.Data\DeploymentManager.Data.csproj", "{750AEA1A-94D2-4FAA-91EB-9013E8515453}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09D72FAA-796B-430F-B428-C5AB227DAF51}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Users\romes\Documents\SQL Server Management Studio\DeploymentManager.sql = ..\..\..\..\Users\romes\Documents\SQL Server Management Studio\DeploymentManager.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +32,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FD15CAF2-3DD7-4F8D-BB6D-839A42FBC61C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -128,5 +130,11 @@ Global
 		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x64.Build.0 = Release|Any CPU
 		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x86.ActiveCfg = Release|Any CPU
 		{750AEA1A-94D2-4FAA-91EB-9013E8515453}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F16CCF00-FF0C-4112-8F9C-9808618E7E3E}
 	EndGlobalSection
 EndGlobal

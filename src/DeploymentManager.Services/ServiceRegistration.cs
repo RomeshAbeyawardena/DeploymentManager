@@ -39,7 +39,7 @@ namespace DeploymentManager.Services
                     .Add(serviceProvider.GetRequiredService<IScheduleModule>() as ScheduleModule)
                     .Add(serviceProvider.GetRequiredService<ITargetModule>()  as TargetModule))
                 .AddSingleton(UtilityCommands.GetCommands()
-                    .Union(DeploymentManagementCommands.GetCommands()))
+                    .Union(ManagementCommands.GetCommands()))
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))

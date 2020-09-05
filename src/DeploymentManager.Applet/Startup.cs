@@ -67,7 +67,7 @@ namespace DeploymentManager.Applet
             this.appletSettings = appletSettings;
         }
 
-        private IDisposable appletSettingsChangedSubscriber;
+        private readonly IDisposable appletSettingsChangedSubscriber;
 
         private IAppletSettings appletSettings;
         private readonly IConsoleWrapper<Startup> consoleWrapper;

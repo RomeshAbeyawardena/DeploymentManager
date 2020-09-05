@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeploymentManager.Shared
+namespace DeploymentManager.Shared.Extensions
 {
     public static class EnumerableExtensions
     {
