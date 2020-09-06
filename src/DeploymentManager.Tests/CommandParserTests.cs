@@ -34,7 +34,7 @@ namespace DeploymentManager.Tests
 
             commandDictionary = new Dictionary<string, ICommand>();
 
-            sut = new CommandParser(applicationSettingsMock.Object, new InputParser(), commandManagerMock.Object);
+            sut = new CommandParser(applicationSettingsMock.Object, new InputParser(InputParserOptions.Default), commandManagerMock.Object);
         }
 
         [

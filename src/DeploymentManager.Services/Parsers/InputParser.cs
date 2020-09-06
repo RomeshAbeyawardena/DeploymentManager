@@ -11,8 +11,23 @@ namespace DeploymentManager.Services.Parsers
 {
     public class InputParser : IInputParser
     {
-        public IInputGroup Parse(string input)
+        public InputParser(IInputParserOptions inputParserOptions)
         {
+            if(inputParserOptions == null)
+            {
+                inputParserOptions = InputParserOptions.Default;
+            }
+
+            this.Options = inputParserOptions;
+        }
+
+        public IInputGroup Parse(string input, IInputParserOptions inputParserOptions = null)
+        {
+            if(inputParserOptions == null)
+            {
+                inputParserOptions = Options;
+            }
+
             bool withinQuotes = false;
             var currentWord = string.Empty;
             var parsedInputList = new List<string>();
@@ -20,13 +35,13 @@ namespace DeploymentManager.Services.Parsers
             {
                 var inputCharacter = input[index - 1];
 
-                if(inputCharacter == '\'' || inputCharacter == '"')
+                if(inputParserOptions.InputQuoteGroups.Any(groupCharacter => groupCharacter == inputCharacter))
                 {
                     withinQuotes = !withinQuotes;
                     continue;
                 }
 
-                if(!withinQuotes && inputCharacter == ' ')
+                if(!withinQuotes && inputParserOptions.InputSeparatorGroups.Any(groupCharacter => groupCharacter == inputCharacter))
                 {
                     parsedInputList.Add(currentWord);
                     currentWord =  string.Empty;
@@ -40,5 +55,7 @@ namespace DeploymentManager.Services.Parsers
 
             return new InputGroup(parsedInputList.ToArray());
         }
+
+        public IInputParserOptions Options { get; }
     }
 }

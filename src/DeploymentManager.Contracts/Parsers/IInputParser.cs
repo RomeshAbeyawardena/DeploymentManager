@@ -8,6 +8,7 @@ namespace DeploymentManager.Contracts.Parsers
 {
     public interface IInputParser
     {
-        IInputGroup Parse(string input);
+        IInputGroup Parse(string input, IInputParserOptions inputParserOptions = null);
+        IInputParserOptions Options { get; }
     }
 }

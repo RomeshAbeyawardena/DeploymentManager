@@ -1,4 +1,5 @@
-﻿using DeploymentManager.Services.Parsers;
+﻿using DeploymentManager.Domains;
+using DeploymentManager.Services.Parsers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DeploymentManager.Tests
         [SetUp]
         public void SetUp()
         {
-            sut = new InputParser();
+            sut = new InputParser(InputParserOptions.Default);
         }
 
         

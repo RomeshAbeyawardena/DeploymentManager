@@ -34,6 +34,7 @@ namespace DeploymentManager.Services
             DataServiceRegistration.Register(services);
 
             services
+                .AddSingleton(InputParserOptions.Default)
                 .AddSingleton<Action<IServiceProvider, IModuleFactory>>((serviceProvider, moduleFactory) => moduleFactory
                     .Add(serviceProvider.GetRequiredService<IDeploymentModule>() as DeploymentModule)
                     .Add(serviceProvider.GetRequiredService<IScheduleModule>() as ScheduleModule)
