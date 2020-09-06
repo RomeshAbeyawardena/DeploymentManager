@@ -3,6 +3,7 @@ using DeploymentManager.Contracts.Managers;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
 using DeploymentManager.Services;
+using DeploymentManager.Services.Parsers;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -33,7 +34,7 @@ namespace DeploymentManager.Tests
 
             commandDictionary = new Dictionary<string, ICommand>();
 
-            sut = new CommandParser(applicationSettingsMock.Object, commandManagerMock.Object);
+            sut = new CommandParser(applicationSettingsMock.Object, new InputParser(), commandManagerMock.Object);
         }
 
         [
