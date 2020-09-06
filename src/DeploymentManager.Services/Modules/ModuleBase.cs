@@ -49,7 +49,9 @@ namespace DeploymentManager.Services.Modules
 
                 return WriteLineAsyncAction(exception.Message, null, LogLevel.Error);
             },
-                exceptionTypes => exceptionTypes.DescribeType<ModuleException>());
+                exceptionTypes => exceptionTypes
+                    .DescribeType<ModuleException>()
+                    .DescribeType<DataValidationException>() );
 
         }
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeploymentManager.Contracts
+namespace DeploymentManager.Contracts.Parsers
 {
     public interface ICommandParser
     {

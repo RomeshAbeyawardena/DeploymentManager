@@ -40,6 +40,11 @@ namespace DeploymentManager.Services
             throw new DataValidationException($"A target type of '{targetType.Name}' already exists");
         }
 
+        public async Task<IEnumerable<TargetType>> GetTargetTypes(CancellationToken cancellationToken)
+        {
+            return await targetTypeRepository.Query.ToArrayAsync(cancellationToken);
+        }
+
         private readonly IAsyncRepository<TargetType> targetTypeRepository;
     }
 }

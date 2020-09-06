@@ -1,5 +1,6 @@
 ﻿using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Managers;
+using DeploymentManager.Contracts.Parsers;
 using DeploymentManager.Contracts.Settings;
 using DeploymentManager.Domains;
 using DeploymentManager.Shared;
@@ -12,9 +13,10 @@ namespace DeploymentManager.Services
 {
     public class CommandParser : ICommandParser
     {
-        public CommandParser(IApplicationSettings applicationSettings, ICommandManager commandManager)
+        public CommandParser(IApplicationSettings applicationSettings, IInputParser inputParser, ICommandManager commandManager)
         {
             this.applicationSettings = applicationSettings;
+            this.inputParser = inputParser;
             this.commandManager = commandManager;
         }
 
@@ -22,7 +24,7 @@ namespace DeploymentManager.Services
         {
             command = null;
 
-            var inputValues = input.Split(new string[]{ " " }, StringSplitOptions.RemoveEmptyEntries);
+            var inputValues = inputParser.Parse(input)?.ParsedValues;
 
             var commandInput = inputValues.FirstOrDefault();
 
@@ -61,6 +63,7 @@ namespace DeploymentManager.Services
         }
 
         private readonly IApplicationSettings applicationSettings;
+        private readonly IInputParser inputParser;
         private readonly ICommandManager commandManager;
     }
 }

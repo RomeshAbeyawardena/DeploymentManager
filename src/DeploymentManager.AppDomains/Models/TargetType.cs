@@ -16,10 +16,10 @@ namespace DeploymentManager.AppDomains.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [GeneratedDefaultValue(nameof(Generators.DateTimeOffSetValueGenerator))]
+        [GeneratedDefaultValue(Generators.DateTimeOffSetValueGenerator)]
         public DateTimeOffset Created { get; set; }
 
-        [GeneratedDefaultValue(nameof(Generators.DateTimeOffSetValueGenerator), setOnUpdate: true)]
+        [GeneratedDefaultValue(Generators.DateTimeOffSetValueGenerator, setOnUpdate: true)]
         public DateTimeOffset Modified { get; set; }
     }
 }

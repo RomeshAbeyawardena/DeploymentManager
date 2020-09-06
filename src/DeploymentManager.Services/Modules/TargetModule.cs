@@ -162,6 +162,14 @@ namespace DeploymentManager.Services.Modules
 
         private async Task ListTargets(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
+            var firstArgument = arguments.FirstOrDefault();
+
+            if(!string.IsNullOrEmpty(firstArgument) && firstArgument.Equals("types"))
+            {
+                await ListTargetTypes(arguments.RemoveAt(0), parameters, cancellationToken);
+                return;
+            }
+
             int? targetTypeId = null;
 
             var parametersDictionary = parameters.ToDictionary();
@@ -181,9 +189,24 @@ namespace DeploymentManager.Services.Modules
             }
         }
 
+        private async Task ListTargetTypes(IEnumerable<string> enumerable, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
+        {
+            var targetTypes = await targetTypeService.GetTargetTypes(cancellationToken);
+
+            foreach(var targetType in targetTypes)
+            {
+                await DisplayTargetType(targetType);
+            }
+        }
+        
+        private Task DisplayTargetType(TargetType target)
+        {
+            return consoleWrapper.WriteLineAsync("Name: {0}\r\n Description: {1}\r\n Created: {2}\r\nModified: {3}\r\n", target.Name, target.Description, target.Created, target.Modified);
+        }
+
         private Task DisplayTarget(Target target)
         {
-            throw new NotImplementedException();
+            return consoleWrapper.WriteLineAsync("{0}", target.Reference, target.DatabaseName, target.ConnectionString, target.TargetTypeId);
         }
 
         private readonly IConsoleWrapper<TargetModule> consoleWrapper;

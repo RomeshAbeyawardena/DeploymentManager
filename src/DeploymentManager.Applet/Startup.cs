@@ -1,5 +1,6 @@
 ﻿using DeploymentManager.Contracts;
 using DeploymentManager.Contracts.Managers;
+using DeploymentManager.Contracts.Parsers;
 using DeploymentManager.Contracts.Settings;
 using DNI.Core.Contracts.Managers;
 using System;
