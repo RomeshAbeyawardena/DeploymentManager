@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Contracts;
+using DNI.Core.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace DeploymentManager.Domains
             InputQuoteGroups = new [] { '"', '\'' },
             InputSeparatorGroups = new [] { ' ' }
         };
+
     }
 }

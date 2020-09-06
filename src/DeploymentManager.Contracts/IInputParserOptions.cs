@@ -8,7 +8,7 @@ namespace DeploymentManager.Contracts
 {
     public interface IInputParserOptions
     {
-        public IEnumerable<char> InputQuoteGroups { get; set; }
-        public IEnumerable<char> InputSeparatorGroups { get; set; }
+        IEnumerable<char> InputQuoteGroups { get; set; }
+        IEnumerable<char> InputSeparatorGroups { get; set; }
     }
 }
