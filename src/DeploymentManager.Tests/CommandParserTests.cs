@@ -43,7 +43,7 @@ namespace DeploymentManager.Tests
             TestCase("echo beans toast -type:grilled", new[] { "beans", "toast" }, new string[] { "type:grilled" }),
             TestCase("echo banana apple orange -style:fruitsalad", new[] { "banana", "apple", "orange" }, new string[] { "style:fruitsalad" }),
             TestCase("echo banana apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet" }),
-            TestCase("echo banana -mix:blended apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet", "mix:blended" }),
+            TestCase("echo banana -mix:'blended with chocolate sprinkles' apple orange -style:smoothy -type:sweet", new[] { "banana", "apple", "orange" }, new string[] { "style:smoothy", "type:sweet", "mix:blended with chocolate sprinkles" }),
             TestCase("echo -yes", new string[] {  }, new string[] {"yes" })]
         public void Parse(string input, string[] argumentsToValidate, string[] parametersToValidate)
         {

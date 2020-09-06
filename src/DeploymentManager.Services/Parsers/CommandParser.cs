@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeploymentManager.Services
+namespace DeploymentManager.Services.Parsers
 {
     public class CommandParser : ICommandParser
     {
