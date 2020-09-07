@@ -174,18 +174,16 @@ namespace DeploymentManager.Services.Modules
                 return;
             }
 
-            int? targetTypeId = null;
-
             var parametersDictionary = parameters.ToDictionary();
 
             var targetType = await GetTargetTypeFromParameters(parametersDictionary, cancellationToken);
 
+            var targets = await deploymentCache.Targets;
+
             if (targetType != null)
             {
-                targetTypeId = targetType.Id;
+                targets = targets.Where(target => target.TargetTypeId == targetType.Id);
             }
-
-            var targets = await deploymentCache.Targets;
 
             foreach (var target in targets)
             {

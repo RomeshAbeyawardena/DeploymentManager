@@ -86,6 +86,13 @@ namespace DeploymentManager.Services.Caches
             return cachedValue;
         }
 
+        public async Task RemoveAsync(CacheType cacheType, string key, CancellationToken cancellationToken)
+        {
+            var cacheService = GetAsyncCacheService(cacheType);
+
+            await cacheService.RemoveAsync(key, cancellationToken);
+        }
+
         private readonly ICacheManager cacheManager;
         private readonly ITargetService targetService;
         private readonly ITargetTypeService targetTypeService;
