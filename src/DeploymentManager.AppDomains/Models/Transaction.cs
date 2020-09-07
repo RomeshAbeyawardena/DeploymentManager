@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DeploymentManager.AppDomains.Models
 {
+    [MessagePack.MessagePackObject((true))]
     public class Transaction
     {
         [Key]

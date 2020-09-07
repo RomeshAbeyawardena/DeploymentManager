@@ -10,6 +10,8 @@ using DNI.Core.Contracts.Builders;
 using DNI.Core.Services.Builders;
 using DNI.Core.Services.Extensions;
 using DNI.Core.Shared.Attributes;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -44,15 +46,23 @@ namespace DeploymentManager.Services
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))
-                .RegisterServices(BuildSecurityProfiles, scannerConfiguration: scanner => scanner
+                .RegisterServices(BuildSecurityProfiles, 
+                    configureDistrubutedCacheOptions: ConfigureDistrubutedCacheOptions,
+                    configureDistributedCacheEntryOptions: ConfigureDistributedCacheEntryOptions, 
+                    scannerConfiguration: scanner => scanner
                 .FromAssemblyOf<ServiceRegistration>()
-                .AddClasses(filter => filter.WithoutAttribute<DNI.Core.Shared.Attributes.IgnoreScanningAttribute>())
+                .AddClasses(filter => filter.WithoutAttribute<IgnoreScanningAttribute>())
                 .AsMatchingInterface());
+        }
 
-            foreach(var service in services)
-            {
-                Debug.WriteLine("{0}: {1}", service.ServiceType.Name, service.ImplementationType?.Name);
-            }
+        private void ConfigureDistrubutedCacheOptions(MemoryDistributedCacheOptions options)
+        {
+            
+        }
+
+        private void ConfigureDistributedCacheEntryOptions(DistributedCacheEntryOptions options)
+        {
+            options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
         }
 
         private void BuildSecurityProfiles(IServiceProvider arg1, IEncryptionProfileDictionaryBuilder arg2)

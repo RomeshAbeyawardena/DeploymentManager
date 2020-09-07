@@ -9,6 +9,7 @@ using DNI.Core.Shared.Constants;
 
 namespace DeploymentManager.AppDomains.Models
 {
+    [MessagePack.MessagePackObject((true))]
     public class Deployment
     {
         [Key]

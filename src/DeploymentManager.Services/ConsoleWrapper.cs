@@ -12,7 +12,7 @@ namespace DeploymentManager.Services
 {
     public abstract class ConsoleWrapper : IConsoleWrapper
     {
-        public ConsoleWrapper(IServiceProvider serviceProvider)
+        protected ConsoleWrapper(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }

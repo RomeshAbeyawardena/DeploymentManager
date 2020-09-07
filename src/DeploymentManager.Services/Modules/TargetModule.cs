@@ -1,5 +1,6 @@
 ﻿using DeploymentManager.AppDomains.Models;
 using DeploymentManager.Contracts;
+using DeploymentManager.Contracts.Caches;
 using DeploymentManager.Contracts.Modules;
 using DeploymentManager.Contracts.Services;
 using DeploymentManager.Shared.Extensions;
@@ -21,7 +22,8 @@ namespace DeploymentManager.Services.Modules
             IExceptionHandler exceptionHandler,
             IConsoleWrapper<TargetModule> consoleWrapper,
             ITargetTypeService targetTypeService,
-            ITargetService targetService)
+            ITargetService targetService,
+            IDeploymentCache deploymentCache)
             : base(exceptionHandler)
         {
             ActionDictionary.Add(builder => builder
@@ -33,6 +35,7 @@ namespace DeploymentManager.Services.Modules
             this.consoleWrapper = consoleWrapper;
             this.targetTypeService = targetTypeService;
             this.targetService = targetService;
+            this.deploymentCache = deploymentCache;
         }
 
         private async Task GetTarget(string targetIdentifier, IEnumerable<string> arg2, IEnumerable<IParameter> arg3, CancellationToken cancellationToken)
@@ -91,6 +94,7 @@ namespace DeploymentManager.Services.Modules
 
             var target = new Target
             {
+                Reference = firstArgument,
                 TargetTypeId = targetType.Id
             };
 
@@ -181,7 +185,7 @@ namespace DeploymentManager.Services.Modules
                 targetTypeId = targetType.Id;
             }
 
-            var targets = await targetService.GetTargetsAsync(targetTypeId, cancellationToken);
+            var targets = await deploymentCache.Targets;
 
             foreach (var target in targets)
             {
@@ -191,7 +195,7 @@ namespace DeploymentManager.Services.Modules
 
         private async Task ListTargetTypes(IEnumerable<string> enumerable, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
-            var targetTypes = await targetTypeService.GetTargetTypes(cancellationToken);
+            var targetTypes = await deploymentCache.TargetTypes;
 
             foreach(var targetType in targetTypes)
             {
@@ -201,16 +205,19 @@ namespace DeploymentManager.Services.Modules
         
         private Task DisplayTargetType(TargetType target)
         {
-            return consoleWrapper.WriteLineAsync("Name: {0}\r\n Description: {1}\r\n Created: {2}\r\nModified: {3}\r\n", target.Name, target.Description, target.Created, target.Modified);
+            return consoleWrapper.WriteLineAsync("Name: {0}\r\n Description: {1}\r\n Created: {2}\r\nModified: {3}\r\n\r\n",
+                target.Name, target.Description, target.Created, target.Modified);
         }
 
         private Task DisplayTarget(Target target)
         {
-            return consoleWrapper.WriteLineAsync("{0}", target.Reference, target.DatabaseName, target.ConnectionString, target.TargetTypeId);
+            return consoleWrapper.WriteLineAsync("Reference: {0}\r\n Database Name: {1}\r\nConnectionString: {2}\r\nTarget Type Id: {3}\r\n\r\n", 
+                target.Reference, target.DatabaseName, target.ConnectionString, target.TargetTypeId);
         }
 
         private readonly IConsoleWrapper<TargetModule> consoleWrapper;
         private readonly ITargetTypeService targetTypeService;
         private readonly ITargetService targetService;
+        private readonly IDeploymentCache deploymentCache;
     }
 }

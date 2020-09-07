@@ -22,13 +22,11 @@ namespace DeploymentManager.Applet
             IValueGeneratorManager valueGeneratorManager,
             ICommandParser commandParser)
         {
-            foreach(var (key, value) in valueGeneratorManager){
-            Debug.WriteLine("{0}: {1}", key, value.Name);
-                    }
             this.serviceProvider = serviceProvider;
             this.consoleWrapper = consoleWrapper;
             appletSettingsChangedSubscriber = appletSettingsManager.AppletSettingsChanged(AppletSettingsChanged);
             appletSettingsManager.UpdateValue(appletSetting => appletSetting.IsRunning, true);
+            
             this.commandParser = commandParser;
         }
 
