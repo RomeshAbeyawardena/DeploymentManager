@@ -39,12 +39,12 @@ namespace DeploymentManager.Applet
                 {
                     if(command.Action != null)
                     { 
-                        command.Action.Invoke(serviceProvider, command.Arguments, command.Parameters);
+                        command.Action.Invoke(command, serviceProvider, command.Arguments, command.Parameters);
                     }
 
                     if(command.ActionAsync != null)
                     {
-                        await command.ActionAsync.Invoke(serviceProvider, command.Arguments, command.Parameters, cancellationToken);
+                        await command.ActionAsync.Invoke(command, serviceProvider, command.Arguments, command.Parameters, cancellationToken);
                     }
                 }
                 else

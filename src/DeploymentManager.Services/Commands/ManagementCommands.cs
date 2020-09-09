@@ -26,11 +26,11 @@ namespace DeploymentManager.Services.Commands
         {
             return DictionaryBuilder
                 .Create<string, ICommand>()
-                .Add("manage", new Command(Deployment))
+                .Add("manage", new Command(nameof(Manage), Manage))
                 .Dictionary;
         }
 
-        private static Task Deployment(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+        private static Task Manage(ICommand command, IServiceProvider serviceProvider, IEnumerable<string> arguments, 
             IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var consoleWrapper = GetConsoleWrapper<ManagementCommands>(serviceProvider);
@@ -38,18 +38,18 @@ namespace DeploymentManager.Services.Commands
             var remainingArguments = arguments.RemoveAt(0);
             if(arguments.FirstOrDefault() == "target")
             {
-                return RunModule<TargetModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<TargetModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "deployment")
             {
-                return RunModule<DeploymentModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<DeploymentModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "schedule")
             {
                 
-                return RunModule<ScheduleModule>(serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<ScheduleModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             return consoleWrapper.WriteLineAsync("Management request not found", true, LogLevel.Warning);

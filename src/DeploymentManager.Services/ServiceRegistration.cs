@@ -40,9 +40,11 @@ namespace DeploymentManager.Services
                 .AddSingleton<Action<IServiceProvider, IModuleFactory>>((serviceProvider, moduleFactory) => moduleFactory
                     .Add(serviceProvider.GetRequiredService<IDeploymentModule>() as DeploymentModule)
                     .Add(serviceProvider.GetRequiredService<IScheduleModule>() as ScheduleModule)
-                    .Add(serviceProvider.GetRequiredService<ITargetModule>()  as TargetModule))
+                    .Add(serviceProvider.GetRequiredService<ITargetModule>()  as TargetModule)
+                    .Add(serviceProvider.GetRequiredService<ILoginModule>()  as LoginModule))
                 .AddSingleton(UtilityCommands.GetCommands()
-                    .Union(ManagementCommands.GetCommands()))
+                    .Union(ManagementCommands.GetCommands())
+                    .Union(LoginCommands.GetCommands()))
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))
                 .RegisterCacheState<DateTimeOffset>()

@@ -22,12 +22,12 @@ namespace DeploymentManager.Services.Commands
         {
             return DictionaryBuilder
                 .Create<string, ICommand>()
-                .Add("echo", new Command(Echo))
-                .Add("quit", new Command(Quit))
+                .Add("echo", new Command(nameof(Echo), Echo))
+                .Add("quit", new Command(nameof(Quit), Quit))
                 .Dictionary;
         }
 
-        private static async Task Quit(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+        private static async Task Quit(ICommand command, IServiceProvider serviceProvider, IEnumerable<string> arguments, 
             IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);
@@ -36,7 +36,7 @@ namespace DeploymentManager.Services.Commands
             await consoleWrapper.WriteLineAsync("Ok bye!");
         }
 
-        private static async Task Echo(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+        private static async Task Echo(ICommand command, IServiceProvider serviceProvider, IEnumerable<string> arguments, 
             IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             var consoleWrapper = GetConsoleWrapper<UtilityCommands>(serviceProvider);

@@ -35,7 +35,7 @@ namespace DeploymentManager.Services.Modules
                 .Add("list", ListTargets));
             WriteLineAsyncAction = (format, args, logLevel) => consoleWrapper.WriteLineAsync(format, true, logLevel, args);
             DefaultAction = GetTarget;
-
+            RequiresArguments = true;
             this.systemClock = systemClock;
             this.consoleWrapper = consoleWrapper;
             this.cacheState = cacheState;

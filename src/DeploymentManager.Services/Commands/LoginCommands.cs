@@ -18,14 +18,15 @@ namespace DeploymentManager.Services.Commands
         {
             return DictionaryBuilder
                 .Create<string, ICommand>()
-                .Add("login", new Command(Login))
+                .Add("login", new Command(nameof(Login), Login))
                 .Dictionary;
         }
 
-        private static Task Login(IServiceProvider serviceProvider, IEnumerable<string> arguments, IEnumerable<IParameter> parameters,
+        private static Task Login(ICommand command, IServiceProvider serviceProvider, 
+            IEnumerable<string> arguments, IEnumerable<IParameter> parameters,
             CancellationToken cancellationToken)
         {
-            return RunModule<LoginModule>(serviceProvider, arguments, parameters, cancellationToken);
+            return RunModule<LoginModule>(command, serviceProvider, arguments, parameters, cancellationToken);
         }
     }
 }

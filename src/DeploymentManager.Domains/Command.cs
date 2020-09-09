@@ -13,14 +13,18 @@ namespace DeploymentManager.Domains
     public class Command : ICommand
     {
         public Command (
-            Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> action)
+            string name,
+            Action<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> action)
         {
+            Name = name;
             Action = action;
         }
 
         public Command (
-            Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> action)
+            string name,
+            Func<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> action)
         {
+            Name = name;
             ActionAsync = action;
         }
 
@@ -31,14 +35,16 @@ namespace DeploymentManager.Domains
             IEnumerable<string> arguments
             )
         {
+            Name = command.Name;
             Action = command.Action;
             ActionAsync = command.ActionAsync;
             Parameters = parameters;
             Arguments = arguments;
         }
 
-        public Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
-        public Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> ActionAsync { get; }
+        public string Name { get; }
+        public Action<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        public Func<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> ActionAsync { get; }
         public IEnumerable<IParameter> Parameters { get; }
         public IEnumerable<string> Arguments { get; }
     }

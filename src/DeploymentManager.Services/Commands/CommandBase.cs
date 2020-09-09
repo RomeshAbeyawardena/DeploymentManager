@@ -24,7 +24,7 @@ namespace DeploymentManager.Services.Commands
             return GetService<IConsoleWrapper<T>>(serviceProvider);
         }
 
-        protected static Task RunModule<TModule>(IServiceProvider serviceProvider, IEnumerable<string> arguments, 
+        protected static Task RunModule<TModule>(ICommand command, IServiceProvider serviceProvider, IEnumerable<string> arguments, 
             IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
             where TModule : class, IModule
         {
@@ -34,7 +34,7 @@ namespace DeploymentManager.Services.Commands
             
             if(module != null)
             {
-                return module.ExecuteRequest(arguments, parameters, cancellationToken);
+                return module.ExecuteRequest(command, arguments, parameters, cancellationToken);
             }
 
             return consoleWrapper.WriteAsync($"Module { typeof(TModule).Name } not found", true, LogLevel.Warning);

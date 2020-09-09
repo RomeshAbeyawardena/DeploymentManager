@@ -9,8 +9,9 @@ namespace DeploymentManager.Contracts
 {
     public interface ICommand
     {
-        Action<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
-        Func<IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> ActionAsync { get; }
+        public string Name { get; }
+        Action<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>> Action { get; }
+        Func<ICommand, IServiceProvider, IEnumerable<string>, IEnumerable<IParameter>, CancellationToken, Task> ActionAsync { get; }
         IEnumerable<IParameter> Parameters { get; }
         IEnumerable<string> Arguments { get; }
     }

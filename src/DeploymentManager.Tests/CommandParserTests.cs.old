@@ -47,7 +47,7 @@ namespace DeploymentManager.Tests
             TestCase("echo -yes", new string[] {  }, new string[] {"yes" })]
         public void Parse(string input, string[] argumentsToValidate, string[] parametersToValidate)
         {
-            commandDictionary.Add("echo", new Command((serviceProvider, arguments, parameters) =>
+            commandDictionary.Add("echo", new Command(( serviceProvider, arguments, parameters) =>
             {
                 throw new SuccessException("triggered");
             }));

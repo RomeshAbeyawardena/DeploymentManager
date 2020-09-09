@@ -9,6 +9,7 @@ namespace DeploymentManager.Contracts.Modules
 {
     public interface IModule
     {
-        Task ExecuteRequest(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken);
+        bool RequiresArguments { get; }
+        Task ExecuteRequest(ICommand commad, IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken);
     }
 }

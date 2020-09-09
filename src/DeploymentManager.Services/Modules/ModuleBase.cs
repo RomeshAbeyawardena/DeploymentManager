@@ -18,19 +18,21 @@ namespace DeploymentManager.Services.Modules
 {
     public abstract class ModuleBase : IModule
     {
-        public virtual Task ExecuteRequest(IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
+        public virtual Task ExecuteRequest(ICommand command, IEnumerable<string> arguments, IEnumerable<IParameter> parameters, CancellationToken cancellationToken)
         {
             return exceptionHandler.TryAsync(arguments, args =>
             {
                 var firstArgument = arguments.FirstOrDefault();
+                bool hasFirstArgument = false;
 
-                if (firstArgument == null)
+                if (RequiresArguments && (hasFirstArgument = firstArgument == null))
                 {
                     throw ModuleException("Invalid arguments", LogLevel.Warning);
                 }
-
-                var remainingArguments = arguments.RemoveAt(0);
-                if (ActionDictionary.TryGetValue(firstArgument, out var action))
+                
+                var remainingArguments = hasFirstArgument ? arguments.RemoveAt(0) : arguments;
+                
+                if (ActionDictionary.TryGetValue(firstArgument ?? command.Name.ToLower(), out var action))
                 {
                     action(remainingArguments, parameters, cancellationToken);
                 }
@@ -54,6 +56,8 @@ namespace DeploymentManager.Services.Modules
                     .DescribeType<DataValidationException>() );
 
         }
+
+        public bool RequiresArguments { get; protected set; }
 
         protected ModuleBase(IExceptionHandler exceptionHandler)
         {

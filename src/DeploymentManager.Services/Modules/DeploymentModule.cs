@@ -34,6 +34,7 @@ namespace DeploymentManager.Services.Modules
                 .Add(builder => builder.Add("add", AddDeployment)
                 .Add("list", ListDeployments));
             DefaultAction = GetDeployment;
+            RequiresArguments = true;
             WriteLineAsyncAction = (format, args, logLevel) => consoleWrapper.WriteLineAsync(format, true, logLevel, args);
             this.applicationSettings = applicationSettings;
             this.systemClock = systemClock;
