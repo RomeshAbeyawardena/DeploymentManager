@@ -44,8 +44,8 @@ namespace DeploymentManager.Services
                 .AddSingleton(UtilityCommands.GetCommands()
                     .Union(ManagementCommands.GetCommands()))
                 .AddSingleton<IApplicationSettings, ApplicationSettings>()
-                .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
                 .AddSingleton(typeof(IConsoleWrapper<>), typeof(ConsoleWrapper<>))
+                .RegisterCacheState<DateTimeOffset>()
                 .RegisterServices(BuildSecurityProfiles, 
                     configureDistrubutedCacheOptions: ConfigureDistrubutedCacheOptions,
                     configureDistributedCacheEntryOptions: ConfigureDistributedCacheEntryOptions, 

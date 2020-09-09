@@ -12,6 +12,7 @@ namespace DeploymentManager.Data
         {
         }
 
+        public DbSet<Credential> Credentials { get; set; }
         public DbSet<Deployment> Deployments { get; set; }
         public DbSet<Target> Targets { get; set; }
         public DbSet<TargetType> TargetTypes { get; set; }

@@ -5,7 +5,9 @@ using DeploymentManager.Contracts.Modules;
 using DeploymentManager.Contracts.Services;
 using DeploymentManager.Shared.Extensions;
 using DNI.Core.Contracts;
+using DNI.Core.Domains;
 using DNI.Core.Shared.Attributes;
+using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,8 +21,10 @@ namespace DeploymentManager.Services.Modules
     public class TargetModule : ModuleBase, ITargetModule
     {
         public TargetModule(
+            ISystemClock systemClock,
             IExceptionHandler exceptionHandler,
             IConsoleWrapper<TargetModule> consoleWrapper,
+            ICacheState<DateTimeOffset> cacheState,
             ITargetTypeService targetTypeService,
             ITargetService targetService,
             IDeploymentCache deploymentCache)
@@ -32,7 +36,9 @@ namespace DeploymentManager.Services.Modules
             WriteLineAsyncAction = (format, args, logLevel) => consoleWrapper.WriteLineAsync(format, true, logLevel, args);
             DefaultAction = GetTarget;
 
+            this.systemClock = systemClock;
             this.consoleWrapper = consoleWrapper;
+            this.cacheState = cacheState;
             this.targetTypeService = targetTypeService;
             this.targetService = targetService;
             this.deploymentCache = deploymentCache;
@@ -126,7 +132,8 @@ namespace DeploymentManager.Services.Modules
 
             if(await targetService.TryAddAsync(target, cancellationToken))
             {
-                await consoleWrapper.WriteLineAsync("Deployment saved", true, LogLevel.Error);
+                cacheState.TryAddOrUpdate(CacheStateItem.Create(nameof(IDeploymentCache.Targets), systemClock.UtcNow));
+                await consoleWrapper.WriteLineAsync("Deployment saved", true, LogLevel.Information);
             }
             else
             {
@@ -156,7 +163,8 @@ namespace DeploymentManager.Services.Modules
 
             if(await targetTypeService.TryAddAsync(targetType, cancellationToken))
             {
-                await consoleWrapper.WriteLineAsync("Target type saved", true, LogLevel.Error);
+                cacheState.TryAddOrUpdate(CacheStateItem.Create(nameof(IDeploymentCache.TargetTypes), systemClock.UtcNow));
+                await consoleWrapper.WriteLineAsync("Target type saved", true, LogLevel.Information);
             }
             else
             {
@@ -213,7 +221,9 @@ namespace DeploymentManager.Services.Modules
                 target.Reference, target.DatabaseName, target.ConnectionString, target.TargetTypeId);
         }
 
+        private readonly ISystemClock systemClock;
         private readonly IConsoleWrapper<TargetModule> consoleWrapper;
+        private readonly ICacheState<DateTimeOffset> cacheState;
         private readonly ITargetTypeService targetTypeService;
         private readonly ITargetService targetService;
         private readonly IDeploymentCache deploymentCache;

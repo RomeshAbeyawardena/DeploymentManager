@@ -45,7 +45,10 @@ namespace DeploymentManager.Services
             if(await GetTargetAsync(target.Reference, cancellationToken) == null)
             {
                 var affectedRows = await targetRepository.SaveChangesAsync(target, cancellationToken);
-                return affectedRows > 0;
+                if (affectedRows > 0)
+                {
+                    return true;
+                }
             }
 
             throw new DataValidationException($"A target with the reference '{ target.Reference }' already exists");
@@ -53,6 +56,8 @@ namespace DeploymentManager.Services
 
         private IQueryable<Target> GetTargetByReference(IQueryable<Target> query, string reference) 
             => query.Where(target => target.Reference == reference);
+
+        private readonly ICacheState<DateTimeOffset> cacheState;
         private readonly IAsyncRepository<Target> targetRepository;
     }
 }

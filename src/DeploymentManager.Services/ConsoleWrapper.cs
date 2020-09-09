@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,7 +71,23 @@ namespace DeploymentManager.Services
             return serviceProvider.GetRequiredService(genericLoggerType) as ILogger<TCategoryName>;
         }
 
-        
+        public Task<string> ReadSecureStringAsync(bool interceptKeyPresses)
+        {
+            var stringBuilder = new StringBuilder();
+            ConsoleKeyInfo currentKey;
+
+            while((currentKey = Console.ReadKey(interceptKeyPresses)).Key != ConsoleKey.Enter)
+            {
+                if(currentKey.Key == ConsoleKey.Backspace)
+                {
+                    stringBuilder.Remove(stringBuilder.Length - 1, 1);
+                }
+                stringBuilder.Append(currentKey.KeyChar);
+            }
+
+            return Task.FromResult(stringBuilder.ToString());
+        }
+
         private readonly IServiceProvider serviceProvider;
     }
 
