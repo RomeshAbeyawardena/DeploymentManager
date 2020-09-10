@@ -29,15 +29,10 @@ namespace DeploymentManager.Services.Factories
         int IReadOnlyCollection<KeyValuePair<string, IModule>>.Count => dictionary.Count;
 
         public IModuleFactory Add<TModule>(TModule module)
-            where TModule: class, IModule
+            where TModule: IModule
         {
             var key = typeof(TModule).Name;
-            if(dictionary.TryAdd(key, module))
-            { 
-                return this;
-            }
-
-            throw new ConcurrencyException(ConcurrentAction.Add, $"Unable to add module {key}");
+            return Add(key, module);
         }
 
         bool IReadOnlyDictionary<string, IModule>.ContainsKey(string key)
@@ -56,11 +51,11 @@ namespace DeploymentManager.Services.Factories
         }
 
         public TModule GetModule<TModule>()
-            where TModule : class, IModule
+            where TModule : IModule
         {
             if(TryGetValue(typeof(TModule).Name, out var module))
             {
-                return module as TModule;
+                return (TModule)module;
             }
 
             return default;
@@ -69,6 +64,16 @@ namespace DeploymentManager.Services.Factories
         public bool TryGetValue(string key, out IModule value)
         {
             return dictionary.TryGetValue(key, out value);
+        }
+
+        public IModuleFactory Add<TModule>(string key, TModule module) where TModule : IModule
+        {
+            if(dictionary.TryAdd(key, module))
+            { 
+                return this;
+            }
+
+            throw new ConcurrencyException(ConcurrentAction.Add, $"Unable to add module {key}");
         }
 
         private readonly ConcurrentDictionary<string, IModule> dictionary;

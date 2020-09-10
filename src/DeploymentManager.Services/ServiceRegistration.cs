@@ -7,8 +7,10 @@ using DeploymentManager.Services.Commands;
 using DeploymentManager.Services.Modules;
 using DNI.Core.Contracts;
 using DNI.Core.Contracts.Builders;
+using DNI.Core.Contracts.Collectors;
 using DNI.Core.Services.Builders;
 using DNI.Core.Services.Extensions;
+using DNI.Core.Services.Implementations;
 using DNI.Core.Shared.Attributes;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -21,6 +23,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using DataServiceRegistration = DeploymentManager.Data.ServiceRegistration;
+
 namespace DeploymentManager.Services
 {
     [IgnoreScanning]
@@ -37,11 +40,15 @@ namespace DeploymentManager.Services
 
             services
                 .AddSingleton(InputParserOptions.Default)
-                .AddSingleton<Action<IServiceProvider, IModuleFactory>>((serviceProvider, moduleFactory) => moduleFactory
-                    .Add(serviceProvider.GetRequiredService<IDeploymentModule>() as DeploymentModule)
-                    .Add(serviceProvider.GetRequiredService<IScheduleModule>() as ScheduleModule)
-                    .Add(serviceProvider.GetRequiredService<ITargetModule>()  as TargetModule)
-                    .Add(serviceProvider.GetRequiredService<ILoginModule>()  as LoginModule))
+                .AddSingleton<Action<IServiceProvider, IModuleFactory>>((serviceProvider, moduleFactory) => 
+                { 
+                    var serviceCollector = TypeCollector.Create(type => type.IsInterface && type != typeof(IModule));
+                    var services = serviceCollector.Collect<IModule>(definitions => definitions.DescribeAssembly<IModuleFactory>());
+                    foreach(var service in services)
+                    { 
+                        moduleFactory.Add(service.Name, (IModule) serviceProvider.GetRequiredService(service));
+                    }
+                })
                 .AddSingleton(UtilityCommands.GetCommands()
                     .Union(ManagementCommands.GetCommands())
                     .Union(LoginCommands.GetCommands()))

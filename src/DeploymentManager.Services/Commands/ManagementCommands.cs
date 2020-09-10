@@ -38,18 +38,18 @@ namespace DeploymentManager.Services.Commands
             var remainingArguments = arguments.RemoveAt(0);
             if(arguments.FirstOrDefault() == "target")
             {
-                return RunModule<TargetModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<ITargetModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "deployment")
             {
-                return RunModule<DeploymentModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<IDeploymentModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             if(arguments.FirstOrDefault() == "schedule")
             {
                 
-                return RunModule<ScheduleModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
+                return RunModule<IScheduleModule>(command, serviceProvider, remainingArguments, parameters, cancellationToken);
             }
 
             return consoleWrapper.WriteLineAsync("Management request not found", true, LogLevel.Warning);

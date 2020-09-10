@@ -1,4 +1,5 @@
 ﻿using DeploymentManager.Contracts;
+using DeploymentManager.Contracts.Modules;
 using DeploymentManager.Domains;
 using DeploymentManager.Services.Modules;
 using DNI.Core.Services.Builders;
@@ -26,7 +27,7 @@ namespace DeploymentManager.Services.Commands
             IEnumerable<string> arguments, IEnumerable<IParameter> parameters,
             CancellationToken cancellationToken)
         {
-            return RunModule<LoginModule>(command, serviceProvider, arguments, parameters, cancellationToken);
+            return RunModule<ILoginModule>(command, serviceProvider, arguments, parameters, cancellationToken);
         }
     }
 }

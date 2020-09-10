@@ -10,9 +10,13 @@ namespace DeploymentManager.Contracts.Factories
     public interface IModuleFactory : IReadOnlyDictionary<string, IModule>
     {
         IModuleFactory Add<TModule>(TModule module)
-            where TModule: class, IModule;
+            where TModule: IModule;
+
+        IModuleFactory Add<TModule>(string key, TModule module)
+            where TModule: IModule;
+
 
         TModule GetModule<TModule>()
-            where TModule: class, IModule;
+            where TModule: IModule;
     }
 }
